@@ -6,16 +6,28 @@
 
 namespace Fatbit\FormRequestParam\Providers;
 
+use Fatbit\FormRequestParam\Commands\Generator\FormRequestParamCommand;
 use Fatbit\FormRequestParam\Middlewares\FormRequestParamValidateMiddleware;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
 
-class FormRequestParamValidateProvider extends ServiceProvider
+class FormRequestParamProvider extends ServiceProvider
 {
     public function boot()
     {
         /** @var \Illuminate\Foundation\Http\Kernel $kernel */
         $kernel = $this->app->get(Kernel::class);
         $kernel->pushMiddleware(FormRequestParamValidateMiddleware::class);
+    }
+
+    public function register()
+    {
+        $this->app->singleton(
+            'command.make.request-param',
+            function ($app) {
+                return new FormRequestParamCommand($app['files']);
+            }
+        );
+        $this->commands('command.make.request-param');
     }
 }

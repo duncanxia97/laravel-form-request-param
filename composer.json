@@ -32,7 +32,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "\\Fatbit\\FormRequestParam\\Providers\\FormRequestParamValidateProvider"
+        "\\Fatbit\\FormRequestParam\\Providers\\FormRequestParamProvider"
       ]
     }
   }

@@ -6,52 +6,62 @@
 
 namespace Fatbit\FormRequestParam\Commands\Generator;
 
+use Fatbit\FormRequestParam\Commands\Generator\Traits\GeneratorCommandTrait;
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand('make:request-param')]
 class FormRequestParamCommand extends GeneratorCommand
 {
-    protected string $classSuffix = 'RequestParam';
+    use GeneratorCommandTrait;
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'make:request-param';
 
-    public function __construct(Filesystem $files)
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'make:request-param';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a new form request param class';
+
+    /**
+     * The type of class being generated.
+     *
+     * @var string
+     */
+    protected $type = 'RequestParam';
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
     {
-        parent::__construct($files);
-
-        $this->setName('make:' . Str::snake($this->classSuffix, '-'));
+        return $rootNamespace.'\RequestParams';
     }
 
-    public function qualifyClass($name): string
+    protected function getOptions()
     {
-        $name = implode(
-            '/',
-            array_map(
-                fn($v) => Str::studly(Str::snake($v)),
-                explode('/', Str::replace('\\', '/', $name))
-            )
-        );
-        $name = Str::studly(Str::snake($name));
-        $name = parent::qualifyClass($name);
-
-        return $name . $this->classSuffix;
-    }
-
-    public function configure()
-    {
-        $this->setDescription('Create a new request param class');
-
-        parent::configure();
-    }
-
-    protected function getStub(): string
-    {
-        return __DIR__ . '/stubs/request_param.stub';
-    }
-
-    protected function getDefaultNamespace($rootNamespace): string
-    {
-        return $rootNamespace ?: 'App\\RequestParams';
+        return [
+            ['force', null, InputOption::VALUE_NONE, 'Create the class even if the service already exists'],
+        ];
     }
 }

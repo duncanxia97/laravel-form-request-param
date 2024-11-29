@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace %NAMESPACE%;
+namespace {{ namespace }};
 
 use Fatbit\FormRequestParam\Abstracts\AbstractFormRequestParam;
 use Fatbit\FormRequestParam\Annotations\FormRequestRule;
 use Fatbit\FormRequestParam\Annotations\FormRequestArrayRule;
 
-class %CLASS% extends AbstractFormRequestParam
+class {{ class }} extends AbstractFormRequestParam
 {
 
 }
