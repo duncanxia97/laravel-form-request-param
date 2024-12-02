@@ -95,7 +95,9 @@ class FormRequestParamValidateMiddleware
                 // 获取需要的数据
                 $data = [];
                 foreach ($className::getFieldMapping() as $key => $toKey) {
-                    $data[$toKey] = $validatedData[$key];
+                    if (isset($validatedData[$key])){
+                        $data[$toKey] = $validatedData[$key];
+                    }
                 }
                 $this->container->singleton($className, fn() => new $className($data));
             }
